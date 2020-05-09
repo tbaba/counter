@@ -1,17 +1,45 @@
-import React from 'react';
+import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
-import './index.css';
-import App from './App';
-import * as serviceWorker from './serviceWorker';
+import CounterContext from './contexts/counter';
+import Counter from './components/counter';
 
-ReactDOM.render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>,
-  document.getElementById('root')
-);
+class App extends Component {
+  constructor(props) {
+    super(props);
 
-// If you want your app to work offline and load faster, you can change
-// unregister() to register() below. Note this comes with some pitfalls.
-// Learn more about service workers: https://bit.ly/CRA-PWA
-serviceWorker.unregister();
+    this.increment = this.increment.bind(this);
+    this.decrement = this.decrement.bind(this);
+
+    this.state = {
+      count: 0,
+    };
+  }
+
+  increment() {
+    const { count } = this.state;
+
+    this.setState({ count: count + 1 });
+  }
+
+  decrement() {
+    const { count } = this.state;
+
+    this.setState({ count: count - 1 });
+  }
+
+  render() {
+    const { count } = this.state;
+
+    return (
+      <CounterContext.Provider value={{
+        count,
+        increment: this.increment,
+        decrement: this.decrement
+      }}>
+        <Counter />
+      </CounterContext.Provider>
+    );
+  }
+}
+
+ReactDOM.render(<App />, document.getElementById('root'));
